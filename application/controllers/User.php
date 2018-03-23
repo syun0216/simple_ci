@@ -19,10 +19,10 @@ class User extends MY_Controller
     public function add_user()
     {
         var_dump($this->input->post('account'));
-        $this->user_model->add(
+        $res = $this->user_model->add(
             array('account' => $this->post_value('account'),
                 'password' => $this->post_value('password'))
         );
-        var_dump('ok');
+        $this->output($res);
     }
 }
