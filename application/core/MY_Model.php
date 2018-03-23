@@ -21,7 +21,52 @@ class MY_Model extends CI_Model {
         }
         return $this->db->insert_id();
     }
+
     //查询
+    public function fetch($where=array(), $table=NULL, $options=array())
+    {
+        if($table){
+            $table_name = $table;
+        } else {
+            $table_name = $this->table;
+        }
+
+        foreach($where as $k=>$w){
+            $this->db->where($k, $w);
+        }
+
+        foreach($options as $k=>$v){
+            switch ($k){
+                case 'select':
+                    $this->db->select($v);
+                    break;
+                case 'order_by':
+                    $this->db->order_by($v);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        $res = $this->db->from($table_name)
+            ->get()->result_array();
+
+        return $res;
+    }
     //删除
+    public function delete($where, $table = NULL){
+        if($table){
+            $this->db->delete($table, $where);
+        } else {
+            $this->db->delete($this->table, $where);
+        }
+    }
     //修改
+    public function edit($attribute, $where, $table = NULL){
+        if($table){
+            $this->db->update($table, $attribute, $where);
+        } else {
+            $this->db->update($this->table, $attribute, $where);
+        }
+    }
 }

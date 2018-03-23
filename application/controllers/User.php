@@ -12,8 +12,8 @@ class User extends MY_Controller
 
     public function get_user()
     {
-        $res = $this->user_model->getUser();
-        $this->output($res);
+        $res = $this->user_model->fetch();
+        $this->output(200,"ok",$res);
     }
 
     public function add_user()
