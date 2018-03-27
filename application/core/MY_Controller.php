@@ -23,9 +23,11 @@ class MY_Controller extends CI_Controller {
     {
         parent::__construct();
         $this->load->database();
+        $this->load->library('form_validation');
+        $this->load->helper('resultcode');
     }
 
-    public function output($code=0, $msg="", $data=array()){
+    public function output($code=SUCCESS_CODE, $msg="", $data=array()){
         $output = $this->output;
 
         $ret=array(
@@ -39,6 +41,47 @@ class MY_Controller extends CI_Controller {
         $output->set_content_type('application/json');
         $output->set_output(json_encode($ret));
 
+    }
+
+    /**
+     * 检测参数是否符合规则
+     * @param array $rules
+     * @param string $method
+     * @throws MY_Exception
+     */
+    public function check_parameters($rules = array(), $method = 'post') {
+        $form_validation = $this->form_validation;
+        if($method === 'get') {
+            $data = array();
+            foreach($rules as $f){
+                $data[$f['field']] = $this->input->get($f['field']);
+            }
+            $form_validation->set_data($data);
+        }else {
+
+        }
+        if($form_validation->run() === FALSE) {
+            throw new Exception('参数出错',INVALID_PARAMETER);
+        }
+    }
+
+    /**
+     * 将get或者post参数存成数组以便插入数据库
+     * @param string $key
+     * @param string $method default='get'
+     * @return array
+     */
+    public function format_value_from_client($key='', $method='get') {
+        $key = explode(',',$key);
+        $attribute = array();
+        foreach($key as $k => $v) {
+            if($method === 'get') {
+                $attribute[$v] = $this->get_value($v);
+            }else {
+                $attribute[$v] = $this->post_value($v);
+            }
+        }
+        return $attribute;
     }
 
     //获取post接口的参数(in body)
