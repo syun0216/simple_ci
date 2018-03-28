@@ -55,18 +55,21 @@ class MY_Model extends CI_Model {
     }
     //删除
     public function delete($where, $table = NULL){
-        if($table){
-            $this->db->delete($table, $where);
-        } else {
-            $this->db->delete($this->table, $where);
-        }
+        $table = $table?$table:$this->table;
+        $this->db->delete($table, $where);
     }
     //修改
     public function edit($attribute, $where, $table = NULL){
-        if($table){
-            $this->db->update($table, $attribute, $where);
-        } else {
-            $this->db->update($this->table, $attribute, $where);
+        $table = $table?$table:$this->table;
+        $this->db->update($table, $attribute, $where);
+        $res = $this-> fetch($where);
+        $hasChange = true;
+        foreach ($attribute as $k => $v) {
+            if($v !== $res[0][$k]) {
+                $hasChange = false;
+                break;
+            }
         }
+        return $hasChange;
     }
 }

@@ -44,6 +44,13 @@ class MY_Controller extends CI_Controller {
     }
 
     /**
+     * 快速输出最常规的参数出错错误
+     */
+    public function normal_error_output() {
+        $this->output(INVALID_PARAMETER,'参数不正确',$this->form_validation->error_array());
+    }
+
+    /**
      * 检测参数是否符合规则
      * @param array $rules
      * @param string $method
@@ -60,9 +67,11 @@ class MY_Controller extends CI_Controller {
         }else {
 
         }
+        $form_validation->set_rules($rules);
         if($form_validation->run() === FALSE) {
-            throw new Exception('参数出错',INVALID_PARAMETER);
+            return False;
         }
+        return True;
     }
 
     /**
@@ -71,7 +80,7 @@ class MY_Controller extends CI_Controller {
      * @param string $method default='get'
      * @return array
      */
-    public function format_value_from_client($key='', $method='get') {
+    public function format_value_from_client($key='', $method='post') {
         $key = explode(',',$key);
         $attribute = array();
         foreach($key as $k => $v) {
@@ -83,6 +92,26 @@ class MY_Controller extends CI_Controller {
         }
         return $attribute;
     }
+
+    /**
+     * @param string $rules
+     * @return array
+     */
+    //转换rules 为可用array以供检测
+    public function format_rules($rules='') {
+        $arr = explode(',',$rules);
+        $result = array();
+        foreach ($arr as $k => $v) {
+            array_push($result,
+                array(
+                    'field' => $v,
+                    'rules' => array('required')
+                )
+            );
+        }
+        return $result;
+    }
+
 
     //获取post接口的参数(in body)
     public function post_value($field, $default=NULL){
