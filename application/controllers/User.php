@@ -12,18 +12,16 @@ class User extends MY_Controller
 
     public function get_user()
     {
-        $rules = $this->format_rules('id');
-        if($this->check_parameters($rules)) {
-            $this->output(INVALID_PARAMETER,'参数不正确',$this->form_validation->error_array());
+        if($this->get_value('id') === NULL) {
+            $res = $this->user_model->fetch();
         }
         else{
             $where = array(
-                'id' => $this->post_value('id')
+                'id' => $this->get_value('id')
             );
-
-            $res = $this->user_model->fetch();
-            $this->output(200,"ok",$res);
+            $res = $this->user_model->fetch($where);
         }
+        $this->output(200,"ok",$res);
     }
 
     public function add_user()
