@@ -28,6 +28,7 @@ class User extends MY_Controller
     public function add_user()
     {
         $this->load->model('last_login_model');
+        $this->load->model('info_model');
         $where = array(
             'account' => $this->post_value('account')
         );
@@ -47,6 +48,11 @@ class User extends MY_Controller
                     'last_login_time' => date('Y-m-d H:i:s')
                 );
                 $this->last_login_model->add($attr_last_login);
+                //新增一条userinfo
+                $attr_user_info = array(
+                    'user_id' => $res
+                );
+                $this->info_model->add($attr_user_info);
             }else {
                 $this->normal_error_output();
             }
@@ -85,6 +91,11 @@ class User extends MY_Controller
         }else {
             $this->normal_error_output();
         }
+    }
+
+    public function logout() {
+        $this->session->set_userdata('user', '');
+        $this->output(SUCCESS_CODE,'登出成功',NULL);
     }
 
     private function update_user_session($user) {
