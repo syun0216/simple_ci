@@ -8,6 +8,7 @@ class User extends MY_Controller
     {
         parent::__construct();
         $this->load->model('user_model');
+        $this->load->library('session');
     }
 
     public function get_user()
@@ -26,6 +27,7 @@ class User extends MY_Controller
 
     public function add_user()
     {
+        $this->load->model('last_login_model');
         $where = array(
             'account' => $this->post_value('account')
         );
@@ -39,6 +41,12 @@ class User extends MY_Controller
                 $attr = $this->format_value_from_client($key, 'post');
                 $res = $this->user_model->add($attr);
                 $this->output(SUCCESS_CODE,'OK',$res);
+                //新增一条last_login
+                $attr_last_login = array(
+                    'user_id' => $res,
+                    'last_login_time' => date('Y-m-d H:i:s')
+                );
+                $this->last_login_model->add($attr_last_login);
             }else {
                 $this->normal_error_output();
             }
@@ -59,5 +67,36 @@ class User extends MY_Controller
         }else{
             $this->normal_error_output();
         }
+    }
+
+    public function login() {
+        $rules = $this->format_rules('account,password');
+        if($this->check_parameters($rules)){
+            $where = array(
+                'account' => $this->post_value('account')
+            );
+            $user = $this->user_model->fetch($where);
+            if(!$user) {
+                $this->output(ROW_NOT_FOUND,'没有该用户',NULL);
+            }else{
+                $this->update_user_session($user[0]);
+                $this->output(SUCCESS_CODE,'登录成功',$user);
+            }
+        }else {
+            $this->normal_error_output();
+        }
+    }
+
+    private function update_user_session($user) {
+        $this->load->model('last_login_model');
+        $where = array(
+            'user_id' => $user['id']
+        );
+        $attr = array(
+            'last_login_time' => date('Y-m-d H:i:s')
+        );
+        $this->last_login_model->edit($attr,$where);
+
+        $this->session->set_userdata('user', $user);
     }
 }

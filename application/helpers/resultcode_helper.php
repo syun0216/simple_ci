@@ -6,4 +6,4 @@ const NO_AUTH = 202;
 const SAME_ROW = 203; // 同名用户
 const UPDATE_ERROR = 204; // 更新失败
 const DELETE_ERROR = 205; // 删除失败
-
+const ROW_NOT_FOUND = 206; //找不到该条数据

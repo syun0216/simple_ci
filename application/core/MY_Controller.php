@@ -19,12 +19,37 @@ class MY_Controller extends CI_Controller {
     /** @var CI_Loader */
     public $load;
 
+    //MODEL START
+    /** @var user_model*/
+    public $user_model;
+
     public function __construct()
     {
         parent::__construct();
         $this->load->database();
         $this->load->library('form_validation');
         $this->load->helper('resultcode');
+        $this->load->library('session');
+        $this->set_user_from_session();
+    }
+
+    private function set_user_from_session() {
+        $s_user = $this->session->userdata('user');
+        var_dump($s_user);
+        $uri = strtoupper($this->uri->uri_string());
+        var_dump(456);
+        if(in_array($uri,array('USER/LOGIN'))) {
+
+        } else {
+            var_dump(345);
+            if(!$s_user['id']) {
+                var_dump(123);
+                $this->output->set_status_header(401);
+                die;
+            }else{
+                $this->uid = $s_user['id'];
+            }
+        }
     }
 
     public function output($code=SUCCESS_CODE, $msg="", $data=array()){
