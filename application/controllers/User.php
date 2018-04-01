@@ -79,7 +79,8 @@ class User extends MY_Controller
         $rules = $this->format_rules('account,password');
         if($this->check_parameters($rules)){
             $where = array(
-                'account' => $this->post_value('account')
+                'account' => $this->post_value('account'),
+                'password' => $this->post_value('password')
             );
             $user = $this->user_model->fetch($where);
             if(!$user) {
