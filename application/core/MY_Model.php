@@ -11,6 +11,8 @@ class MY_Model extends CI_Model {
     public $table = 'dumb';
     public $select = "*";
     public $order_by = "";
+    public $page = 1;
+    public $limit = 12;
 
     //新增
     public function add($attr, $table = NULL) {
@@ -37,6 +39,12 @@ class MY_Model extends CI_Model {
 
         foreach($options as $k=>$v){
             switch ($k){
+                case 'page':
+                    $this->page = $v;
+                    break;
+                case 'limit':
+                    $this->limit = $v;
+                    break;
                 case 'select':
                     $this->db->select($v);
                     break;
@@ -48,7 +56,8 @@ class MY_Model extends CI_Model {
             }
         }
 
-        $res = $this->db->from($table_name)
+        $res = $this->db->limit($this->limit, ($this->page-1)*$this->limit)
+            ->from($table_name)
             ->get()->result_array();
 
         return $res;
