@@ -2,6 +2,7 @@ import scrapy
 from web_spider.items import RankItem
 from scrapy.http import Request
 from urllib import parse
+import re
 
 class RankSpider(scrapy.Spider):
     name="dongqiudiRank"
@@ -42,11 +43,10 @@ class RankSpider(scrapy.Spider):
         index = response.meta.get('index','') + 1
         rank_list = response.xpath("//table[@class='list_1']/tr")
         side_list = response.xpath("//div[@id='stat_list']/a[{0}]".format(index))
-        # print(side_list.xpath('./text()').extract()[0].strip())
+        # print(re.search('competition=(\d+)', response.url).group(1))
         rankItem = RankItem()
         for item in rank_list[2:]:
 
-            # rank = item.xpath("//*[@id='stat_detail']/table/tr[3]/td[1]").extract()
             rankItem['rank'] = item.xpath("./td[1]/text()").extract()[0]
             rankItem['team_avatar'] = item.xpath("./td[2]/a/img/@src").extract()[0]
             rankItem['team_name'] = item.xpath("./td[2]/a/text()").extract()[1].strip()
@@ -58,7 +58,7 @@ class RankSpider(scrapy.Spider):
             rankItem['fumble'] = item.xpath("./td[8]/text()").extract()[0]
             rankItem['GD'] = item.xpath("./td[9]/text()").extract()[0]
             rankItem['integral'] = item.xpath("./td[10]/text()").extract()[0]
-            rankItem['rel'] = side_list.xpath('./@rel').extract()[0]
+            rankItem['rel'] = re.search('competition=(\d+)', response.url).group(1)
             rankItem['rel_name'] = side_list.xpath('./text()').extract()[0].strip()
             rankItem['type'] = 'rank'
             # print(rankItem)
