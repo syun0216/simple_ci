@@ -51,7 +51,7 @@ class DongqiudiSpider(scrapy.Spider):
             toutiaoItem['time'] = item.css('.info .time::text').extract()[0]
             toutiaoItem['comment'] = item.css('.info a::attr(href)').extract()[0]
             toutiaoItem['image'] = item.css('a img::attr(src)').extract()[0]
-            print(toutiaoItem)
+            toutiaoItem['type'] = "toutiao"
             yield toutiaoItem
 
         pass

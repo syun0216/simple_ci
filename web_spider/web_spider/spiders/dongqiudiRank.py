@@ -1,10 +1,12 @@
 import scrapy
 from web_spider.items import RankItem
+from scrapy.http import Request
+from urllib import parse
 
 class RankSpider(scrapy.Spider):
     name="dongqiudiRank"
     allow_domain = ["dongqiudi.com"]
-    start_urls = ["https://www.dongqiudi.com/#"]
+    start_urls = ["https://www.dongqiudi.com/data"]
 
     custom_settings = {
         # "FILES_STORE": SZ_FILE_PATH,
@@ -23,14 +25,43 @@ class RankSpider(scrapy.Spider):
 
     }
 
-    def parse(self, response):
-        rank_list = response.css("#rank_list .stat_list")
+    def parse(self,response):
+        cur_links = response.css('#stat_list a::attr(href)').extract()
+        # print(cur_links)
+        next_url = response.css('#stat_tab a::attr(href)').extract()
+        for link in cur_links:
+            # url = parse.urljoin(response.url,link)
+            # print(cur_links.index(link))
+            yield Request(url=parse.urljoin(response.url, link), meta={'url': link,'index': cur_links.index(link)}, callback=self.parse_detail)
+        # for next_link in next_url:
+        #     yield Request(url=parse.urljoin(response.url, next_link), callback=self.parse)
+        pass
+
+    def parse_detail(self, response):
+        # rank_list = response.css("#rank_list .stat_list")
+        index = response.meta.get('index','') + 1
+        rank_list = response.xpath("//table[@class='list_1']/tr")
+        side_list = response.xpath("//div[@id='stat_list']/a[{0}]".format(index))
+        # print(side_list.xpath('./text()').extract()[0].strip())
         rankItem = RankItem()
-        for item in rank_list:
-            rankItem['id'] = item.css('td span::text').extract()[0]
-            rankItem['rank'] = item.css('td span::text').extract()[0]
-            rankItem['team_name'] = item.css('.team_name a::text').extract()[0]
-            rankItem['team_avatar'] = item.css('.team_name a img::attr(src)').extract()[0]
-            # rankItem['integral'] = item.css('')
-            print(rankItem)
-            pass
+        for item in rank_list[2:]:
+
+            # rank = item.xpath("//*[@id='stat_detail']/table/tr[3]/td[1]").extract()
+            rankItem['rank'] = item.xpath("./td[1]/text()").extract()[0]
+            rankItem['team_avatar'] = item.xpath("./td[2]/a/img/@src").extract()[0]
+            rankItem['team_name'] = item.xpath("./td[2]/a/text()").extract()[1].strip()
+            rankItem['round'] = item.xpath("./td[3]/text()").extract()[0]
+            rankItem['win'] = item.xpath("./td[4]/text()").extract()[0]
+            rankItem['draw'] = item.xpath("./td[5]/text()").extract()[0]
+            rankItem['lost'] = item.xpath("./td[6]/text()").extract()[0]
+            rankItem['goal'] = item.xpath("./td[7]/text()").extract()[0]
+            rankItem['fumble'] = item.xpath("./td[8]/text()").extract()[0]
+            rankItem['GD'] = item.xpath("./td[9]/text()").extract()[0]
+            rankItem['integral'] = item.xpath("./td[10]/text()").extract()[0]
+            rankItem['rel'] = side_list.xpath('./@rel').extract()[0]
+            rankItem['rel_name'] = side_list.xpath('./text()').extract()[0].strip()
+            rankItem['type'] = 'rank'
+            # print(rankItem)
+            yield rankItem
+
+        pass

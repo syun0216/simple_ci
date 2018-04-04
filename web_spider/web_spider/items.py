@@ -21,6 +21,7 @@ class ToutiaoItem(scrapy.Item):
     comment = scrapy.Field()
     id = scrapy.Field()
     image = scrapy.Field()
+    type = scrapy.Field()
     pass
 
 class RankItem(scrapy.Item):
@@ -32,4 +33,11 @@ class RankItem(scrapy.Item):
     draw = scrapy.Field()
     lost = scrapy.Field()
     integral = scrapy.Field()
+    type = scrapy.Field()
+    round = scrapy.Field()
+    goal = scrapy.Field()
+    fumble = scrapy.Field()
+    GD = scrapy.Field()
+    rel = scrapy.Field()
+    rel_name = scrapy.Field()
     pass
