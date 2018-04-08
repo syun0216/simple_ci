@@ -129,7 +129,7 @@ $db['default']['stricton'] = FALSE;
 
 $db['qhdata'] = array(
     'dsn'	=> '',
-    'hostname' => '127.0.0.1',
+    'hostname' => '119.29.243.158',
     'username' => 'root',
     'password' => 'qhdata$2018',
     'database' => 'qhdata_website',
