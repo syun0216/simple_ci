@@ -110,3 +110,41 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
+
+//$db['default']['hostname'] = '127.0.0.1';
+//$db['default']['username'] = 'root';
+//$db['default']['password'] = 'qhdata$2018';
+//$db['default']['database'] = 'qhdata_website';
+//$db['default']['dbdriver'] = 'mysqli';
+//$db['default']['dbprefix'] = '';
+//$db['default']['pconnect'] = FALSE;
+//$db['default']['db_debug'] = TRUE;
+//$db['default']['cache_on'] = FALSE;
+//$db['default']['cachedir'] = '';
+//$db['default']['char_set'] = 'utf8';
+//$db['default']['dbcollat'] = 'utf8_general_ci';
+//$db['default']['swap_pre'] = '';
+//$db['default']['autoinit'] = TRUE;
+//$db['default']['stricton'] = FALSE;
+
+$db['qhdata'] = array(
+    'dsn'	=> '',
+    'hostname' => '127.0.0.1',
+    'username' => 'root',
+    'password' => 'qhdata$2018',
+    'database' => 'qhdata_website',
+    'dbdriver' => 'mysqli',
+    'dbprefix' => '',
+    'pconnect' => FALSE,
+    'db_debug' => (ENVIRONMENT !== 'production'),
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'encrypt' => FALSE,
+    'compress' => FALSE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE
+);

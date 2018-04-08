@@ -30,6 +30,7 @@ class MY_Controller extends CI_Controller {
         $this->load->library('form_validation');
         $this->load->helper('resultcode');
         $this->load->library('session');
+        $this->db = $this->load->database('qhdata', TRUE);
         $this->set_user_from_session();
     }
 
