@@ -18,8 +18,15 @@ class Company_news extends MY_Controller
      * 获取公司讯息
      */
     public function get_company_news() {
-        $res = $this->company_news_model->fetch();
-        $this->output(SUCCESS_CODE,'获取公司咨询成功',$res);
+        $rules = $this->format_rules('page,limit');
+        if($this->check_parameters($rules,'get')) {
+            $options = $this->format_value_from_client('page,limit','get');
+            $options['order_by'] = 'id DESC';
+            $res = $this->company_news_model->fetch(array(),$this->company_news_model->table,$options);
+            $this->output(SUCCESS_CODE,'获取公司咨询成功',$res);
+        }else {
+            $this->normal_error_output();
+        }
     }
 
     public function dispatch_company_news() {

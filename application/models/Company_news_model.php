@@ -17,7 +17,6 @@ class Company_news_model extends MY_Model
      * @return mixed
      */
     public function fetch($where=array(), $table=NULL, $options=array()) {
-        $options['order_by'] = 'id DESC';
         return parent::fetch($where, $table, $options);
     }
 

@@ -20,7 +20,7 @@ class News extends MY_Controller
      * @return array
      */
     public function get_news() {
-        $rules = $this->format_rules('page,limit','get');
+        $rules = $this->format_rules('page,limit');
         if($this->check_parameters($rules,'get')) {
             $options = $this->format_value_from_client('page,limit','get');
             $res = $this->news_model->fetch(array(),$this->news_model->table,$options);
