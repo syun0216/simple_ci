@@ -26,7 +26,7 @@ class MY_Controller extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->load->database();
+//        $this->load->database();
         $this->load->library('form_validation');
         $this->load->helper('resultcode');
         $this->load->library('session');
@@ -37,7 +37,7 @@ class MY_Controller extends CI_Controller {
     private function set_user_from_session() {
         $s_user = $this->session->userdata('user');
         $uri = strtoupper($this->uri->uri_string());
-        if(in_array($uri,array('USER/LOGIN'))) {
+        if(in_array($uri,array('USER/LOGIN','COMPANY_NEWS/GET_COMPANY_NEWS'))) {
 
         } else {
             if(!$s_user['id']) {
