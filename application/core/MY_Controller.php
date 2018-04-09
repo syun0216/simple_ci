@@ -37,16 +37,16 @@ class MY_Controller extends CI_Controller {
     private function set_user_from_session() {
         $s_user = $this->session->userdata('user');
         $uri = strtoupper($this->uri->uri_string());
-        if(in_array($uri,array('USER/LOGIN','COMPANY_NEWS/GET_COMPANY_NEWS'))) {
-
-        } else {
-            if(!$s_user['id']) {
-                $this->output->set_status_header(401);
-                die;
-            }else{
-                $this->uid = $s_user['id'];
-            }
-        }
+//        if(in_array($uri,array('USER/LOGIN','COMPANY_NEWS/GET_COMPANY_NEWS'))) {
+//
+//        } else {
+//            if(!$s_user['id']) {
+//                $this->output->set_status_header(401);
+//                die;
+//            }else{
+//                $this->uid = $s_user['id'];
+//            }
+//        }
     }
 
     public function output($code=SUCCESS_CODE, $msg="", $data=array()){
