@@ -11,6 +11,7 @@ class MY_Controller extends CI_Controller {
     // 重写ci的input、output、form_validation
     public $db;
     /** @var CI_Input */
+    public $qhdata_db;
     public $input;
     /** @var CI_Output */
     public $output;
@@ -26,11 +27,11 @@ class MY_Controller extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-//        $this->load->database();
+        $this->load->database();
         $this->load->library('form_validation');
         $this->load->helper('resultcode');
         $this->load->library('session');
-        $this->db = $this->load->database('qhdata', TRUE);
+        // $this->qhdata_db = $this->load->database('qhdata', TRUE);
         $this->set_user_from_session();
     }
 

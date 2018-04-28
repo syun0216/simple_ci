@@ -10,6 +10,11 @@ class Navigation_model extends MY_Model
 {
     public $table = 'navigation';
 
+    public function __construct(){
+        parent::__construct();
+        $this->db = $this->qhdata_db;
+    }
+
     public function fetch($where=array(), $table=NULL, $options=array()) {
         $option['order_by'] = 'sort DESC';
         return parent::fetch($where, $table, $options);

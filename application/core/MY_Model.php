@@ -9,10 +9,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MY_Model extends CI_Model {
     public $table = 'dumb';
+    public $qhdata_db = '';
     public $select = "*";
     public $order_by = "";
     public $page = 1;
     public $limit = 12;
+
+    public function __construct()
+    {
+        parent::__construct();
+        // $this->qhdata_db = get_instance()->qhdata_db;
+    }
 
     //新增
     public function add($attr, $table = NULL) {

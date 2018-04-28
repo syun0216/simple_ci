@@ -10,6 +10,11 @@ class Company_news_model extends MY_Model
 {
     public $table = 'companynews';
 
+    public function __construct(){
+        parent::__construct();
+        $this->db = $this->qhdata_db;
+    }
+
     /**
      * @param array $where
      * @param null $table
