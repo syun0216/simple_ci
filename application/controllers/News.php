@@ -23,6 +23,7 @@ class News extends MY_Controller
         $rules = $this->format_rules('page,limit');
         if($this->check_parameters($rules,'get')) {
             $options = $this->format_value_from_client('page,limit','get');
+            $options = array_merge($options, array('order_by' => 'id DESC'));
             $res = $this->news_model->fetch(array(),$this->news_model->table,$options);
             $this->output(SUCCESS_CODE,'获取信息成功',$res);
         }else{
