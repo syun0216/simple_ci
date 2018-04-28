@@ -41,3 +41,15 @@ class RankItem(scrapy.Item):
     rel = scrapy.Field()
     rel_name = scrapy.Field()
     pass
+
+class PlayRankItem(scrapy.Item):
+    rank = scrapy.Field()
+    data = scrapy.Field()
+    player_avatar = scrapy.Field()
+    player_name = scrapy.Field()
+    team_avatar = scrapy.Field()
+    team_name = scrapy.Field()
+    rel = scrapy.Field()
+    rel_name = scrapy.Field()
+    type = scrapy.Field()
+    pass
