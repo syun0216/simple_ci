@@ -80,6 +80,21 @@ class WebSpiderPipeline(object):
                     """
                     cursor.execute(insert_sql,
                                        (item['rank'], item['data'], item['player_avatar'], item['player_name'],item['team_avatar'], item['team_name'], item['rel'], item['rel_name']))
+                elif item['type'] == 'assist':
+                    insert_sql = """INSERT INTO `player_assist_rank` (`rank`,`data`,`player_avatar`,`player_name`,`team_avatar`,`team_name`,`rel`,`rel_name`)
+                                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                                    ON DUPLICATE KEY UPDATE
+                                    rank=VALUES (rank),
+                                    data=VALUES (data),
+                                    player_avatar=VALUES (player_avatar),
+                                    player_name=VALUES (player_name),
+                                    team_avatar=VALUES (team_avatar),
+                                    team_name=VALUES (team_name),
+                                    rel=VALUES (rel),
+                                    rel_name=VALUES (rel_name)
+                    """
+                    cursor.execute(insert_sql,
+                                       (item['rank'], item['data'], item['player_avatar'], item['player_name'],item['team_avatar'], item['team_name'], item['rel'], item['rel_name']))
             # connection is not autocommit by default. So you must commit to save
             # your changes.
             connection.commit()

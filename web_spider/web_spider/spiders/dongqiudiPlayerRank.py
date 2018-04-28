@@ -6,7 +6,7 @@ import re
 
 
 class PlayerRankSpider(scrapy.Spider):
-    name = 'dongqiudiPlayerGoalRank'
+    name = 'dongqiudiPlayerRank'
     allow_domain = ["dongqiudi.com"]
     start_urls = ["https://www.dongqiudi.com/data"]
 
@@ -28,10 +28,12 @@ class PlayerRankSpider(scrapy.Spider):
 
     def parse(self,response):
         cur_links = response.css('#stat_list a::attr(href)').extract()
-        next_url = '&type=goal_rank'
+        goal_url = '&type=goal_rank'
+        assist_url = '&type=assist_rank'
         for link in cur_links:
-            # print(parse.urljoin(response.url,link+next_url));
-            yield Request(url=parse.urljoin(response.url, link+next_url),meta={'url': link,'index': cur_links.index(link)},callback=self.parse_player_goal_details)
+            # print(parse.urljoin(response.url,link+goal_url));
+            yield Request(url=parse.urljoin(response.url, link+goal_url),meta={'url': link,'index': cur_links.index(link),'type': 'goal'},callback=self.parse_player_goal_details)
+            yield Request(url=parse.urljoin(response.url, link+assist_url),meta={'url': link,'index': cur_links.index(link),'type': 'assist'},callback=self.parse_player_goal_details)
         pass
 
     def parse_player_goal_details(self, response):
@@ -49,8 +51,9 @@ class PlayerRankSpider(scrapy.Spider):
             playerItem['data'] = item.xpath("./td[4]/text()").extract()[0]
             playerItem['rel'] = re.search('competition=(\d+)', response.url).group(1)
             playerItem['rel_name'] = side_list.xpath('./text()').extract()[0].strip()
-            playerItem['type'] = 'goal'
+            playerItem['type'] = response.meta.get('type', '')
             yield playerItem
 
         pass
+
 
