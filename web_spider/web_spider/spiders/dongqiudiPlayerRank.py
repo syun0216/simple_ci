@@ -31,7 +31,7 @@ class PlayerRankSpider(scrapy.Spider):
         goal_url = '&type=goal_rank'
         assist_url = '&type=assist_rank'
         for link in cur_links:
-            # print(parse.urljoin(response.url,link+goal_url));
+            # print(parse.urljoin(response.url,link+goal_url))
             yield Request(url=parse.urljoin(response.url, link+goal_url),meta={'url': link,'index': cur_links.index(link),'type': 'goal'},callback=self.parse_player_goal_details)
             yield Request(url=parse.urljoin(response.url, link+assist_url),meta={'url': link,'index': cur_links.index(link),'type': 'assist'},callback=self.parse_player_goal_details)
         pass
@@ -42,7 +42,7 @@ class PlayerRankSpider(scrapy.Spider):
         side_list = response.xpath("//div[@id='stat_list']/a[{0}]".format(index))
         playerItem = PlayRankItem()
 
-        for item in rank_list[2:]:
+        for item in rank_list[1:]:
             playerItem['rank'] = item.xpath("./td[1]/text()").extract()[0]
             playerItem['player_avatar'] = item.xpath("./td[2]/a/img/@src").extract()[0]
             playerItem['player_name'] = item.xpath("./td[2]/a/text()").extract()[1].strip()
